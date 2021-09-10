@@ -1,0 +1,80 @@
+#:kivy 2.0.0
+
+<MainScreen>:
+    name: 'mainScreen'
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        SquareCamera:
+            id: camera
+            resolution: (1920, 1080)
+            play: True
+            size: self.x, self.y
+            canvas.before:
+                PushMatrix
+                Rotate:
+                    angle: -90 if app.rotated else 0
+                    origin: self.center
+            canvas.after:
+                PopMatrix
+
+        Button:
+            text: 'Predict'
+            id: predict-btn
+            size_hint_y: None
+            height: 0.1 * root.height
+            on_release:
+                root.predict()
+                root.manager.transition.direction = 'left'
+
+<ResultScreen>:
+    name: 'resultScreen'
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.95, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: 'vertical'
+        Image:
+            id: img
+            size_hint_y: None
+            height: 0.3 * root.height
+            canvas.before:
+                PushMatrix
+                Rotate:
+                    angle: -90 if app.rotated else 0
+                    origin: self.center
+            canvas.after:
+                PopMatrix
+        Label:
+            id: prediction
+            text: ''
+            color: (0, 0, 0, 1)
+            size_hint_y: None
+            height: '32sp'
+            font_size: '24sp'
+        GridLayout:
+            id: images
+            cols: 3
+            
+        Button:
+            text: 'Go Back'
+            size_hint_y: None
+            height: 0.1 * root.height
+            on_release:
+                app.root.current = 'mainScreen'
+                root.manager.transition.direction = 'right'
+
+<Button>:
+    background_normal: ''
+    background_color: (0.7, 0.7, 0.7, 1)
+    disabled_color: (1, 1, 1, 1)
+    color: (66/255, 135/255, 245/255, 1)
+    font_size: '30sp'

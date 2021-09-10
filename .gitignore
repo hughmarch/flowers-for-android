@@ -1,0 +1,10 @@
+.buildozer
+.ipynb_checkpoints
+.vscode
+.venv
+__pycache__
+bin
+*.exe
+*.dll
+samples
+credentials.json
