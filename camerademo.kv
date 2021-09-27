@@ -1,0 +1,64 @@
+#:kivy 2.0.0
+
+<CameraRecordButton>:
+    button_color: (0.13, 0.58, 0.95, 0.8)
+    _down_color: (0.09, 0.4, 0.67, 0.8)
+    icon_color: (1, 1, 1, 1)
+    _button_size: dp(70)
+    size_hint: None, None
+    size: self._button_size, self._button_size
+
+    canvas:
+        Color:
+            rgba: self.button_color if self.state == 'normal' and not self.disabled else self._down_color
+        Ellipse:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: self.icon_color
+        Ellipse:
+            pos: [x - 0.6 * self.width / 2 for x in self.center]
+            size: [x * 0.6 for x in self.size]
+
+<CustomProgressBar>:
+    bg_color: (0.2, 0.2, 0.2, 0.6)
+    color: (1, 1, 1, 1)
+    size_hint_y: None
+    height: dp(5)
+    value: 0
+    canvas:
+        Color:
+            rgba: self.bg_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: self.color
+        Rectangle:
+            pos: self.pos
+            size: self.value * self.width, self.height
+
+<CaptureScreen>:
+    FloatLayout:
+        Camera:
+            id: camera
+            play: True
+            resolution: (1920, 1080)
+        CameraRecordButton:
+            id: record_button
+            center_x: root.center_x
+            top: self.height + dp(20)
+            on_release: root.start_capturing()
+        BoxLayout:
+            id: progress_indicator
+            orientation: "vertical"
+            size_hint_y: None
+            height: dp(40)
+            opacity: 0
+            top: root.height - dp(10)
+            CustomProgressBar:
+                id: progress_bar
+                pos_hint: {'x':.1}
+                size_hint_x: 0.8
+            Label:
+                id: progress_text
