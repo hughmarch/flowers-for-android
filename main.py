@@ -9,6 +9,11 @@ from PIL import Image
 import numpy as np
 import os
 
+from kivy.utils import platform
+if platform == "android":
+    from android.permissions import request_permissions, Permission
+    request_permissions([Permission.CAMERA])
+
 # https://stackoverflow.com/questions/61185454/kivy-disable-screen-timeout
 
 class CameraRecordButton(ButtonBehavior, Label):
