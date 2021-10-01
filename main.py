@@ -15,7 +15,7 @@ from kivy.utils import platform
 
 def check_permissions():
     if not platform == "android":
-        return True
+        return False
 
     from android.permissions import check_permission, Permission
     permissions = [Permission.CAMERA]
@@ -26,7 +26,7 @@ class CameraPermissionsScreen(Screen):
         super().__init__(**kw)
         self.request_permissions()
 
-    def request_permissions():
+    def request_permissions(self):
         from android.permissions import request_permissions, Permission
         permissions = [Permission.CAMERA]
 
