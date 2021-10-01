@@ -3,18 +3,39 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
+from kivy.uix.screenmanager import ScreenManager
 from kivy.clock import Clock
 
 from PIL import Image
 import numpy as np
-import os
 
 from kivy.utils import platform
-if platform == "android":
-    from android.permissions import request_permissions, Permission
-    request_permissions([Permission.CAMERA])
 
 # https://stackoverflow.com/questions/61185454/kivy-disable-screen-timeout
+
+def check_permissions():
+    if not platform == "android":
+        return True
+
+    from android.permissions import check_permission, Permission
+    permissions = [Permission.CAMERA]
+    return check_permission(permissions)
+
+class CameraPermissionsScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.request_permissions()
+
+    def request_permissions():
+        from android.permissions import request_permissions, Permission
+        permissions = [Permission.CAMERA]
+
+        def on_permissions_callback(permissions, grant_results):
+            if all(grant_results):
+                App.get_running_app().root.current = 'captureScreen'
+                pass
+        
+        request_permissions(permissions, callback=on_permissions_callback)
 
 class CameraRecordButton(ButtonBehavior, Label):
     pass
@@ -70,8 +91,15 @@ class CaptureScreen(Screen):
         
 
 class CameraDemoApp(App):
+    rotated = platform == 'android'
+
     def build(self):
-        return CaptureScreen()
+        sm = ScreenManager()
+        if not check_permissions():
+            sm.add_widget(CameraPermissionsScreen())
+
+        sm.add_widget(CaptureScreen())
+        return sm
 
 if __name__ == "__main__":
-    CameraDemoApp().run()
+        CameraDemoApp().run()
