@@ -1,0 +1,66 @@
+#:kivy 2.0.0
+
+<IntervalCaptureProgressBar>:
+    bg_color: (0.2, 0.2, 0.2, 0.6)
+    color: (1, 1, 1, 1)
+    size_hint_y: None
+    height: dp(5)
+    value: 0
+    canvas:
+        Color:
+            rgba: self.bg_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: self.color
+        Rectangle:
+            pos: self.pos
+            size: self.value * self.width, self.height
+
+<IntervalCaptureProgressIndicator>:
+    orientation: "vertical"
+    opacity: 0
+    IntervalCaptureProgressBar:
+        id: progress_bar
+        pos_hint: {'x':.1}
+        size_hint_x: 0.8
+    Label:
+        id: progress_text
+
+<IntervalCameraShootButton>:
+    button_color: (0.13, 0.58, 0.95, 0.8)
+    _down_color: (0.09, 0.4, 0.67, 0.8)
+    icon_color: (1, 1, 1, 1)
+    _button_size: dp(70)
+    size_hint: None, None
+    size: self._button_size, self._button_size
+    canvas:
+        Color:
+            rgba: self.button_color if self.state == 'normal' and not self.disabled else self._down_color
+        Ellipse:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: self.icon_color
+        Ellipse:
+            pos: [x - 0.6 * self.width / 2 for x in self.center]
+            size: [x * 0.6 for x in self.size]
+
+<IntervalCamera>:
+    id: camera
+    resolution: 1920, 1080
+    size: max(root.width, root.height), max(root.width, root.height)
+    center: root.center
+    allow_stretch: True
+    IntervalCameraShootButton:
+        id: camera_button
+        on_release: root.shoot()
+        right: root.width - dp(10)
+        center_y: root.center_y
+    IntervalCaptureProgressIndicator:
+        id: progress_indicator
+        top: root.height - dp(10)
+        width: root.width
+        height: dp(40)
+        size_hint: None, None

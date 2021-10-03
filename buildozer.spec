@@ -36,7 +36,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,numpy,pillow
+requirements = python3,kivy,numpy,pillow,xcamera
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -200,7 +200,7 @@ android.permissions = INTERNET,CAMERA
 
 # (bool) Indicate whether the screen should stay on
 # Don't forget to add the WAKE_LOCK permission if you set this to True
-#android.wakelock = False
+android.wakelock = True
 
 # (list) Android application meta-data to set (key=value format)
 #android.meta_data =
