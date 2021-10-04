@@ -6,8 +6,13 @@ from kivy.uix.screenmanager import ScreenManager
 from PIL import Image
 import numpy as np
 
+"""
+camerademo.kv defines the contents of the CaptureScreen. CaptureScreen
+includes an IntervalCamera widget, whose events are handled by the class
+methods on_capture_image and on_finish.
+"""
 class CaptureScreen(Screen):
-    images_list = []
+    images_list = [] 
 
     def on_capture_image(self, camera, texture):
         size = texture.size
