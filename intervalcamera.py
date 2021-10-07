@@ -7,6 +7,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
 from kivy.properties import NumericProperty
+from kivy.utils import platform
 
 class IntervalCaptureProgressBar(Widget):
     pass
@@ -52,6 +53,16 @@ class IntervalCamera(XCamera):
         self.register_event_type('on_finish')
         Builder.load_file("./intervalcamera.kv")
         self.force_landscape()
+
+        if platform == "android":
+            from jnius import autoclass
+            PythonActivity = autoclass('org.kivy.android.PythonActivity')
+            activity = PythonActivity.mActivity
+
+            Context = autoclass('android.content.Context')
+
+            self.manager = activity.getSystemService(Context.CAMERA_SERVICE)
+
         Camera.__init__(self, **kwargs)
 
     def shoot(self):
